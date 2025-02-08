@@ -12,6 +12,7 @@ interface StrictComposition {
   copper: number;
   zinc: number;
   nickel: number;
+  [key: string]: number;  // Index signature per compatibilità dinamica
 }
 
 const defaultComposition: StrictComposition = {
