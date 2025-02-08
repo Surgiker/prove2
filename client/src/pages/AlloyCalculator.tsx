@@ -12,7 +12,7 @@ interface StrictComposition {
   copper: number;
   zinc: number;
   nickel: number;
-  [key: string]: number;  // Index signature per chiavi dinamiche
+  [key: string]: number;
 }
 
 const defaultComposition: StrictComposition = {
@@ -39,11 +39,13 @@ export default function AlloyCalculator() {
 
   const handleSliderChange = (metal: keyof StrictComposition, newValue: number) => {
     const roundedValue = Math.round(newValue * 10) / 10;
+
+    // Correzione delle chiavi dinamiche
     const otherMetals = Object.keys(composition).filter(m => m !== metal) as string[];
-    const [metal1, metal2] = otherMetals;
+    const [metal1, metal2] = otherMetals.map(m => m as keyof StrictComposition);
 
     const remaining = 100 - roundedValue;
-    const currentRatio = composition[metal1 as keyof StrictComposition] / composition[metal2 as keyof StrictComposition];
+    const currentRatio = composition[metal1] / composition[metal2];
 
     let newMetal1 = Math.round((remaining * currentRatio / (1 + currentRatio)) * 10) / 10;
     let newMetal2 = Math.round((remaining - newMetal1) * 10) / 10;
