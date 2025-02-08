@@ -1,9 +1,10 @@
 import React from 'react';
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
+import { MetalComposition } from '../types';  // Aggiungi questa importazione
 
 interface MetalSliderProps {
-  metal: string;
+  metal: keyof MetalComposition;  // Cambiato da string
   value: number;
   constraints: {
     min: number;
@@ -13,7 +14,7 @@ interface MetalSliderProps {
 }
 
 export default function MetalSlider({ metal, value, constraints, onChange }: MetalSliderProps) {
-  const formatLabel = (text: string) => {
+  const formatLabel = (text: keyof MetalComposition) => {  // Cambiato da string
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
 
