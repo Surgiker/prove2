@@ -33,12 +33,13 @@ export default function CompositionChart({ composition }: CompositionChartProps)
           dataKey="value"
         >
           {data.map((entry, index) => (
-            <Cell 
-              key={`cell-${index}`} 
-              fill={metalColors[entry.name as keyof typeof metalColors]} // Cast corretto per risolvere l’errore
+            <Cell
+              key={`cell-${index}`}
+              fill={metalColors[entry.name as keyof typeof metalColors] || '#000'} // Default nel caso di errore
             />
           ))}
         </Pie>
       </PieChart>
     </ResponsiveContainer>
- 
+  );
+}
