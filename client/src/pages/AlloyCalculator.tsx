@@ -7,12 +7,7 @@ import PriceDisplay from "../components/PriceDisplay";
 import { Button } from "@/components/ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
-
-interface MetalComposition {
-  copper: number;
-  zinc: number;
-  nickel: number;
-}
+import { MetalComposition } from '../types';
 
 const defaultComposition: MetalComposition = {
   copper: 55,
@@ -47,7 +42,6 @@ export default function AlloyCalculator() {
     let newMetal1 = Math.round((remaining * currentRatio / (1 + currentRatio)) * 10) / 10;
     let newMetal2 = Math.round((remaining - newMetal1) * 10) / 10;
 
-    // Adjust values to respect constraints
     if (newMetal1 < constraints[metal1].min) {
       newMetal1 = constraints[metal1].min;
       newMetal2 = remaining - newMetal1;
