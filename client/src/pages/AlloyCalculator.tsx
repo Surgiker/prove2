@@ -8,35 +8,37 @@ import { Button } from "@/components/ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 
-interface MetalComposition {
-  [key: string]: number;
+interface StrictComposition {
+  copper: number;
+  zinc: number;
+  nickel: number;
 }
 
-const defaultComposition: MetalComposition = {
+const defaultComposition: StrictComposition = {
   copper: 55,
   zinc: 30,
   nickel: 15,
 };
 
-const constraints: { [key: string]: { min: number; max: number } } = {
+const constraints: { [key in keyof StrictComposition]: { min: number; max: number } } = {
   copper: { min: 47, max: 64 },
   zinc: { min: 15, max: 42 },
   nickel: { min: 10, max: 25 },
 };
 
-const defaultPrices: { [key: string]: number } = {
+const defaultPrices: StrictComposition = {
   copper: 7.00,
   zinc: 25.00,
   nickel: 80.00,
 };
 
 export default function AlloyCalculator() {
-  const [composition, setComposition] = useState<MetalComposition>(defaultComposition);
+  const [composition, setComposition] = useState<StrictComposition>(defaultComposition);
   const { theme, setTheme } = useTheme();
 
-  const handleSliderChange = (metal: keyof MetalComposition, newValue: number) => {
+  const handleSliderChange = (metal: keyof StrictComposition, newValue: number) => {
     const roundedValue = Math.round(newValue * 10) / 10;
-    const otherMetals = Object.keys(composition).filter(m => m !== metal);
+    const otherMetals = Object.keys(composition).filter(m => m !== metal) as (keyof StrictComposition)[];
     const [metal1, metal2] = otherMetals;
 
     const remaining = 100 - roundedValue;
@@ -98,10 +100,10 @@ export default function AlloyCalculator() {
             {Object.entries(composition).map(([metal, value]) => (
               <MetalSlider
                 key={metal}
-                metal={metal}
+                metal={metal as keyof StrictComposition}
                 value={value}
-                constraints={constraints[metal]}
-                onChange={(newValue) => handleSliderChange(metal as keyof MetalComposition, newValue)}
+                constraints={constraints[metal as keyof StrictComposition]}
+                onChange={(newValue) => handleSliderChange(metal as keyof StrictComposition, newValue)}
               />
             ))}
 
