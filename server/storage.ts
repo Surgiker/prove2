@@ -69,7 +69,10 @@ export class DatabaseStorage implements IStorage {
   async addMetalPrice(price: InsertMetalPrice): Promise<MetalPrice> {
     const [newPrice] = await db
       .insert(metalPrices)
-      .values(price)
+      .values({
+        ...price,
+        price: price.price.toString(),  // Conversione del tipo `number` a `string`
+      })
       .returning();
     return newPrice;
   }
