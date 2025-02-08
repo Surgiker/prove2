@@ -42,7 +42,7 @@ export default function AlloyCalculator() {
 
     // Correzione delle chiavi dinamiche
     const otherMetals = Object.keys(composition).filter(m => m !== metal) as string[];
-    const [metal1, metal2] = otherMetals.map(m => m as keyof StrictComposition);
+    const [metal1, metal2] = otherMetals.map(m => m as string);
 
     const remaining = 100 - roundedValue;
     const currentRatio = composition[metal1] / composition[metal2];
