@@ -1,21 +1,16 @@
 import React from 'react';
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-
-interface MetalPrices {
-  copper: number;
-  zinc: number;
-  nickel: number;
-}
+import { MetalComposition } from '../types';
 
 interface PriceDisplayProps {
-  composition: MetalPrices;
-  prices: MetalPrices;
+  composition: MetalComposition;
+  prices: MetalComposition;
 }
 
 export default function PriceDisplay({ composition, prices }: PriceDisplayProps) {
   const calculateTotalPrice = () => {
     return Object.entries(composition).reduce((total, [metal, percentage]) => {
-      return total + (prices[metal as keyof MetalPrices] * percentage / 100);
+      return total + (prices[metal as keyof MetalComposition] * percentage / 100);
     }, 0);
   };
 
