@@ -12,7 +12,7 @@ interface StrictComposition {
   copper: number;
   zinc: number;
   nickel: number;
-  [key: string]: number;  // Index signature per compatibilità dinamica
+  [key: string]: number;  // Index signature per chiavi dinamiche
 }
 
 const defaultComposition: StrictComposition = {
@@ -39,29 +39,29 @@ export default function AlloyCalculator() {
 
   const handleSliderChange = (metal: keyof StrictComposition, newValue: number) => {
     const roundedValue = Math.round(newValue * 10) / 10;
-    const otherMetals = Object.keys(composition).filter(m => m !== metal) as (keyof StrictComposition)[];
+    const otherMetals = Object.keys(composition).filter(m => m !== metal) as string[];
     const [metal1, metal2] = otherMetals;
 
     const remaining = 100 - roundedValue;
-    const currentRatio = composition[metal1] / composition[metal2];
+    const currentRatio = composition[metal1 as keyof StrictComposition] / composition[metal2 as keyof StrictComposition];
 
     let newMetal1 = Math.round((remaining * currentRatio / (1 + currentRatio)) * 10) / 10;
     let newMetal2 = Math.round((remaining - newMetal1) * 10) / 10;
 
     // Adjust values to respect constraints
-    if (newMetal1 < constraints[metal1].min) {
-      newMetal1 = constraints[metal1].min;
+    if (newMetal1 < constraints[metal1 as string].min) {
+      newMetal1 = constraints[metal1 as string].min;
       newMetal2 = remaining - newMetal1;
-    } else if (newMetal1 > constraints[metal1].max) {
-      newMetal1 = constraints[metal1].max;
+    } else if (newMetal1 > constraints[metal1 as string].max) {
+      newMetal1 = constraints[metal1 as string].max;
       newMetal2 = remaining - newMetal1;
     }
 
-    if (newMetal2 < constraints[metal2].min) {
-      newMetal2 = constraints[metal2].min;
+    if (newMetal2 < constraints[metal2 as string].min) {
+      newMetal2 = constraints[metal2 as string].min;
       newMetal1 = remaining - newMetal2;
-    } else if (newMetal2 > constraints[metal2].max) {
-      newMetal2 = constraints[metal2].max;
+    } else if (newMetal2 > constraints[metal2 as string].max) {
+      newMetal2 = constraints[metal2 as string].max;
       newMetal1 = remaining - newMetal2;
     }
 
@@ -103,7 +103,7 @@ export default function AlloyCalculator() {
                 key={metal}
                 metal={metal as keyof StrictComposition}
                 value={value}
-                constraints={constraints[metal as keyof StrictComposition]}
+                constraints={constraints[metal as string]}
                 onChange={(newValue) => handleSliderChange(metal as keyof StrictComposition, newValue)}
               />
             ))}
