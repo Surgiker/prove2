@@ -1,24 +1,24 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-const metalColors = {
+const metalColors: { [key: string]: string } = {
   copper: '#b87333',
   zinc: '#d8d8d8',
-  nickel: '#808080'
+  nickel: '#808080',
 };
 
+interface MetalComposition {
+  [key: string]: number;
+}
+
 interface CompositionChartProps {
-  composition: {
-    copper: number;
-    zinc: number;
-    nickel: number;
-  };
+  composition: MetalComposition;
 }
 
 export default function CompositionChart({ composition }: CompositionChartProps) {
   const data = Object.entries(composition).map(([name, value]) => ({
     name,
-    value
+    value,
   }));
 
   return (
@@ -35,11 +35,10 @@ export default function CompositionChart({ composition }: CompositionChartProps)
           {data.map((entry, index) => (
             <Cell 
               key={`cell-${index}`} 
-              fill={metalColors[entry.name]}
+              fill={metalColors[entry.name as keyof typeof metalColors]} // Cast corretto per risolvere l’errore
             />
           ))}
         </Pie>
       </PieChart>
     </ResponsiveContainer>
-  );
-}
+ 
