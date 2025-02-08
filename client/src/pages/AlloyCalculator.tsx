@@ -8,36 +8,40 @@ import { Button } from "@/components/ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 
-const defaultComposition = {
+interface MetalComposition {
+  [key: string]: number;
+}
+
+const defaultComposition: MetalComposition = {
   copper: 55,
   zinc: 30,
-  nickel: 15
+  nickel: 15,
 };
 
-const constraints = {
+const constraints: { [key: string]: { min: number; max: number } } = {
   copper: { min: 47, max: 64 },
   zinc: { min: 15, max: 42 },
-  nickel: { min: 10, max: 25 }
+  nickel: { min: 10, max: 25 },
 };
 
-const defaultPrices = {
+const defaultPrices: { [key: string]: number } = {
   copper: 7.00,
   zinc: 25.00,
-  nickel: 80.00
+  nickel: 80.00,
 };
 
 export default function AlloyCalculator() {
-  const [composition, setComposition] = useState(defaultComposition);
+  const [composition, setComposition] = useState<MetalComposition>(defaultComposition);
   const { theme, setTheme } = useTheme();
-  
-  const handleSliderChange = (metal: string, newValue: number) => {
+
+  const handleSliderChange = (metal: keyof MetalComposition, newValue: number) => {
     const roundedValue = Math.round(newValue * 10) / 10;
     const otherMetals = Object.keys(composition).filter(m => m !== metal);
     const [metal1, metal2] = otherMetals;
-    
+
     const remaining = 100 - roundedValue;
     const currentRatio = composition[metal1] / composition[metal2];
-    
+
     let newMetal1 = Math.round((remaining * currentRatio / (1 + currentRatio)) * 10) / 10;
     let newMetal2 = Math.round((remaining - newMetal1) * 10) / 10;
 
@@ -62,7 +66,7 @@ export default function AlloyCalculator() {
       ...composition,
       [metal]: roundedValue,
       [metal1]: newMetal1,
-      [metal2]: newMetal2
+      [metal2]: newMetal2,
     });
   };
 
@@ -90,18 +94,18 @@ export default function AlloyCalculator() {
               <CompositionChart composition={composition} />
               <ColorPreview composition={composition} />
             </div>
-            
+
             {Object.entries(composition).map(([metal, value]) => (
               <MetalSlider
                 key={metal}
                 metal={metal}
                 value={value}
                 constraints={constraints[metal]}
-                onChange={(newValue) => handleSliderChange(metal, newValue)}
+                onChange={(newValue) => handleSliderChange(metal as keyof MetalComposition, newValue)}
               />
             ))}
-            
-            <Button 
+
+            <Button
               className="w-full mt-4"
               onClick={handleReset}
             >
@@ -110,7 +114,7 @@ export default function AlloyCalculator() {
           </div>
 
           <div>
-            <PriceDisplay 
+            <PriceDisplay
               composition={composition}
               prices={defaultPrices}
             />
