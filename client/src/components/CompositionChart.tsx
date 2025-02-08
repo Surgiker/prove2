@@ -1,15 +1,12 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { MetalComposition } from '../types';
 
-const metalColors: { [key: string]: string } = {
+const metalColors: { [key in keyof MetalComposition]: string } = {
   copper: '#b87333',
   zinc: '#d8d8d8',
   nickel: '#808080',
 };
-
-interface MetalComposition {
-  [key: string]: number;
-}
 
 interface CompositionChartProps {
   composition: MetalComposition;
@@ -35,7 +32,7 @@ export default function CompositionChart({ composition }: CompositionChartProps)
           {data.map((entry, index) => (
             <Cell
               key={`cell-${index}`}
-              fill={metalColors[entry.name as keyof typeof metalColors] || '#000'} // Default nel caso di errore
+              fill={metalColors[entry.name as keyof MetalComposition] || '#000'}
             />
           ))}
         </Pie>
